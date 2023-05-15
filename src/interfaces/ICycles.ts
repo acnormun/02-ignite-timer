@@ -4,5 +4,5 @@ export interface ICycles{
     minutesAmound: number,
     startDate: Date,
     interruptedDate?: Date,
-    finishedDate?: 
+    finishedDate?: Date
 }
