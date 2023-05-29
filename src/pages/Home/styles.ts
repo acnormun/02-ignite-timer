@@ -1,4 +1,3 @@
-
 import styled from "styled-components";
 
 export const HomeContainer = styled.main`
@@ -16,13 +15,6 @@ export const HomeContainer = styled.main`
     gap: 3.5rem;
   }
 `;
-
-
-
-
-
-
-
 
 export const BaseCountDownButton = styled.button`
   width: 100%;
