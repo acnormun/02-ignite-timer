@@ -1,4 +1,4 @@
-import { HandPalm, Play } from "phosphor-react";
+import { HandPalm, Play, TextT } from "phosphor-react";
 import {
   HomeContainer,
   StartCountdownButton,
@@ -38,16 +38,25 @@ export function Home() {
   const task = watch("task");
   const isSubmitDisabled = !task;
 
+  function handleCreateNewCycle(data: TTask){
+    createNewCycle(data)
+    reset()
+  }
+
+  function handleInterruptCycle(){
+    interruptCurrentCycle()
+  }
+
   return (
     <HomeContainer>
-      <form action="" onSubmit={handleSubmit(createNewCycle)}>
+      <form action="" onSubmit={handleSubmit(handleCreateNewCycle)}>
         <FormProvider {...newCycleForm}>
           <NewCycleForm />
         </FormProvider>
         <CountDown />
 
         {activeCycle ? (
-          <StopCountdownButton type="button" onClick={interruptCurrentCycle}>
+          <StopCountdownButton type="button" onClick={handleInterruptCycle}>
             <HandPalm size={24} />
             Parar
           </StopCountdownButton>

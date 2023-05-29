@@ -46,6 +46,16 @@ export function CyclesContextProvider({
   }
 
   function interruptCurrentCycle() {
+    setCycles((state) => 
+    state.map((cycle) => {
+      if (cycle.id === activeCycleId) {
+        return { ...cycle, interruptedDate: new Date()};
+    }else{
+      return cycle
+      }
+    ),
+    )
+
     setActiveCycleId(null);
     markCurrentCycleAsFinished();
   }
