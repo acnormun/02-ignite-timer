@@ -15,6 +15,10 @@ export function CyclesContextProvider({
 
   const activeCycle = cycles.find((cycle) => cycle.id === activeCycleId);
 
+  function setSecondsPassed(seconds: number) {
+    setAmountSecondsPassed(seconds);
+  }
+
   function markCurrentCycleAsFinished() {
     setCycles((state) =>
       state.map((cycle) => {
@@ -25,10 +29,6 @@ export function CyclesContextProvider({
         }
       })
     );
-  }
-
-  function setSecondsPassed(seconds: number) {
-    setAmountSecondsPassed(seconds);
   }
 
   function createNewCycle(data: TTask) {
@@ -42,23 +42,22 @@ export function CyclesContextProvider({
     setCycles((state) => [...state, newCycle]);
     setActiveCycleId(newCycle.id);
     setAmountSecondsPassed(0);
-    // reset();
   }
 
   function interruptCurrentCycle() {
-    setCycles((state) => 
-    state.map((cycle) => {
-      if (cycle.id === activeCycleId) {
-        return { ...cycle, interruptedDate: new Date()};
-    }else{
-      return cycle
-      }
-    ),
+    setCycles((state) =>
+      state.map((cycle) => {
+        if (cycle.id === activeCycleId) {
+          return { ...cycle, interruptedDate: new Date() }
+        } else {
+          return cycle
+        }
+      }),
     )
-
-    setActiveCycleId(null);
-    markCurrentCycleAsFinished();
+    setActiveCycleId(null)
+    document.title = 'Ignite Timer'
   }
+
   return (
     <CyclesContext.Provider
       value={{
@@ -69,7 +68,7 @@ export function CyclesContextProvider({
         setSecondsPassed,
         createNewCycle,
         interruptCurrentCycle,
-        cycles
+        cycles,
       }}
     >
       {children}
