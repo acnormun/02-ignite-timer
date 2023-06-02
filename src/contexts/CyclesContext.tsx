@@ -4,55 +4,18 @@ import { ICycles } from "../interfaces/ICycles";
 import { CyclesState } from "../interfaces/CyclesState";
 import { TTask } from "../pages/Home";
 import { CyclesContextProviderProps } from "../interfaces/CyclesContextProviderProps";
+import { cyclesReducer } from "../reducers/cycles/reducer";
+import { ActionTypes, addNewCycleAction, interruptCurrentCycleAction, markCurrentCycleAsFinishedAction } from "../enums/actionTypes";
 
 export const CyclesContext = createContext({} as CyclesContextType);
 
 export function CyclesContextProvider({
   children,
 }: CyclesContextProviderProps) {
-  const [cyclesState, dispatch] = useReducer(
-    (state: CyclesState, action: any) => {
-      switch (action.type) {
-        case "ADD_NEW_CYCLE":
-          return {
-            ...state,
-            cycles: [...state.cycles, action.payload.newCycle],
-            activeCycleId: action.payload.newCycle.id,
-          };
-        case "INTERRUPT_CURRENT_CYCLE":
-          return {
-            ...state,
-            cycles: state.cycles.map((cycle) => {
-              if (cycle.id === state.activeCycleId) {
-                return { ...cycle, interruptedDate: new Date() };
-              } else {
-                return cycle;
-              }
-            }),
-            activeCycleId: null,
-          };
-        case "MARK_CURRENT_CYCLE_AS_FINISHED":
-          return {
-            ...state,
-            cycles: state.cycles.map((cycle) => {
-              if (cycle.id === state.activeCycleId) {
-                return { ...cycle, finishedDate: new Date() };
-              } else {
-                return cycle;
-              }
-            }),
-            activeCycleId: null,
-          };
-
-        default:
-          return state;
-      }
-    },
-    {
-      cycles: [],
-      activeCycleId: null,
-    }
-  );
+  const [cyclesState, dispatch] = useReducer(cyclesReducer, {
+    cycles: [],
+    activeCycleId: null,
+  });
 
   const [amountSecondsPassed, setAmountSecondsPassed] = useState(0);
 
@@ -65,10 +28,7 @@ export function CyclesContextProvider({
   }
 
   function markCurrentCycleAsFinished() {
-    dispatch({
-      type: "MARK_CURRENT_CYCLE_AS_FINISHED",
-      payload: { activeCycleId },
-    });
+    dispatch(markCurrentCycleAsFinishedAction());
   }
 
   function createNewCycle(data: TTask) {
@@ -78,20 +38,12 @@ export function CyclesContextProvider({
       minutesAmound: data.minutesAmound,
       startDate: new Date(),
     };
-    dispatch({
-      type: "ADD_NEW_CYCLE",
-      payload: { newCycle },
-    });
+    dispatch(addNewCycleAction(newCycle));
     setAmountSecondsPassed(0);
   }
 
   function interruptCurrentCycle() {
-    dispatch({
-      type: "INTERRUPT_CURRENT_CYCLE",
-      payload: {
-        activeCycleId,
-      },
-    });
+    dispatch(interruptCurrentCycleAction());
     document.title = "Ignite Timer";
   }
 
