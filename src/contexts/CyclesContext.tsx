@@ -61,7 +61,7 @@ export function CyclesContextProvider({
 
   function createNewCycle(data: TTask) {
     const newCycle: ICycles = {
-      id: String(new Date().getTime),
+      id: String(new Date()),
       task: data.task,
       minutesAmound: data.minutesAmound,
       startDate: new Date(),
